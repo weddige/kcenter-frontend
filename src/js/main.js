@@ -1,5 +1,64 @@
+angular.module('kcenter', [])
+.controller('KCenterController', ['$http', function($http) {
+    this.params = [];
+    this.options = [];
+    this.param = '';
+    this.computation_server = 'http://localhost:8887';
+
+    this.state = 'select';
+
+    this.next = function next() {
+        var self = this;
+        this.params.push(this.param);
+        var url = this.computation_server + '/algorithms/'
+         + this.params.join('/');
+        $http.get(url).success(function(data, status, headers) {
+            if (data['suggestions']) {
+                self.options = data['suggestions'];
+            } else {
+                self.params = [];
+                self.param = '';
+                self.init();
+                if (status == 202) {
+                    self.state = 'waiting';
+                    self.wait(this.computation_server + headers('Location'));
+                } else {
+                    self.state = 'view';
+                    self.data = data;
+                }
+            }
+        });
+    };
+
+    this.wait = function wait(url) {
+        var self = this;
+        $http.get(url).success(function(data) {
+            if (data['state'] == 'finished') {
+			    self.state = 'view';
+                self.data = data;
+			} else {
+			    setTimeout(function(){ self.wait(url); }, 1000);
+		    }
+        });
+    }
+
+    this.init = function init(self) {
+        var self = this;
+        var url = this.computation_server + '/algorithms';
+        $http.get(url).success(function(data) {
+            self.options = data['suggestions'];
+        });
+    }
+
+    this.restart = function restart() {
+        this.state = 'select';
+    }
+
+    this.init();
+}]);
+
 var computation_server = 'http://localhost:8887';
-var test = null;
+
 
 function get_value(item) {
 	var result = item.getAttribute('value');
@@ -9,29 +68,6 @@ function get_value(item) {
 			result = selected.getAttribute('value')||selected.innerText;
 	}
 	return result;
-}
-
-function show_result(data) {
-    var results = document.getElementById('workspace');
-	var innerHTML = '<table>';
-	innerHTML += '<tr><th>Description</th></td><td>' + data['description'] + '</td></tr>';
-	innerHTML += '<tr><th>Result</th><td>';
-	for (p in data['result']) {
-		innerHTML += '(' + data['result'][p] + '), '
-	}
-	innerHTML += '</td></tr><tr><th>Objective</th><td>'
-	innerHTML += data['objective']
-	innerHTML += '</td></tr><tr><th>Visualisation</th></td><td>';
-	innerHTML += '<img src="' + computation_server + data['img'] + '" / >';
-	innerHTML += '</td></tr></table>';
-
-	results.innerHTML = innerHTML;
-
-    var button = document.createElement('button');
-    button.setAttribute('onclick', 'update_task_form();');
-    button.setAttribute('type', 'button');
-    button.innerText = 'Neuer Task';
-    results.appendChild(button);
 }
 
 function wait_for_result(uri) {
@@ -50,69 +86,3 @@ function wait_for_result(uri) {
     }
     request.send();
 }
-
-function update_task_form() {
-			var container = document.getElementById('workspace');
-			var args = [];
-			var arg_fields = container.children[0].getElementsByClassName('task_arg');
-			for (i=0; i<arg_fields.length; i++) {
-				args.push(get_value(arg_fields[i]));
-			}
-
-			var uri = computation_server + '/algorithms';
-			for (arg in args)
-				uri = uri + '/' + args[arg];
-			var request = new XMLHttpRequest();
-            request.open('GET', uri);
-
-			request.onreadystatechange = function() {
-		        if (request.readyState == 2) {
-		            if (request.status == 202) {
-		                container.innerHTML = '<img src="img/balls64.gif" alt="Please wait" />'
-		                return wait_for_result(request.getResponseHeader('Location'));
-		            }
-                } else if (request.readyState == 4) {
-					if (request.status == 200) {
-                    	var data = JSON.parse(request.responseText);
-                        if (data['suggestions']) {
-
-                            var form = document.createElement('form');
-                            form.innerText = data['title'];
-                            form.setAttribute('id', 'task_form');
-                            for (arg in args) {
-                                var input = document.createElement('input');
-                                input.setAttribute('id', arg);
-                                input.setAttribute('type', 'hidden');
-                                input.setAttribute('class', 'task_arg');
-                                input.setAttribute('value', args[arg]);
-                                form.appendChild(input);
-                            }
-
-                            var select = document.createElement('select');
-                            select.setAttribute('id', args.length);
-                            select.setAttribute('class', 'task_arg');
-                            var innerHTML = '';
-                            for (i in data['suggestions']) {
-                                innerHTML += '<option>' + data['suggestions'][i] + '</option>'
-                            }
-                            select.innerHTML = innerHTML;
-                            form.appendChild(select);
-
-                            var button = document.createElement('button');
-                            button.setAttribute('onclick', 'update_task_form();');
-                            button.setAttribute('type', 'button');
-                            button.innerText = 'Weiter';
-                            form.appendChild(button);
-
-                            container.innerHTML = form.outerHTML;
-                        } else {
-                            data = JSON.parse(request.responseText);
-			                show_result(data);
-                        }
-					}
-                }
-            }
-            request.send();
-}
-
-document.addEventListener("DOMContentLoaded", update_task_form, false);

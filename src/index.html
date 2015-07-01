@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>k-center</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/angular.min.js"></script>
     <script src="js/main.js"></script>
 </head>
 <body>
@@ -13,8 +14,29 @@
 		k-center bla bla bla.<br />
 		Geometric, on graphs, etc...
 	</p>
-    <div id="workspace">
-		<form />
-	</div>
+    <div ng-app="kcenter" ng-controller="KCenterController as controller">
+        <div ng-if="controller.state == 'select'">
+            <span ng-repeat="param in controller.params track by $index">{{ param }}/</span>
+            <select ng-model="controller.param">
+                <option ng-repeat="option in controller.options">{{ option }}</option>
+            </select> <button ng-click="controller.next()">Next</button>
+        </div>
+        <div ng-if="controller.state == 'waiting'">
+            <img src="img/balls64.gif" alt="Please wait" />
+        </div>
+        <div ng-if="controller.state == 'view'">
+            <table>
+                <tr><th>Description</th><td>{{ controller.data.description }}</td></tr>
+                <tr><th>Result</th><td><span ng-repeat="p in controller.data.result ">({{ p }}), </span></td></tr>
+                <tr><th>Objective</th><td>{{ controller.data.objective }}</td></tr>
+                <tr>
+                    <th>Visualisation</th>
+                    <td><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td>
+                </tr>
+            </table>
+            <button ng-click="controller.restart()">Go back</button>
+        </div>
+    </div>
+
 </body>
 </html>
