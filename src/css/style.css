@@ -1,9 +1,91 @@
 body {
-			padding:1em;
-			margin:1em;
-			background-color:#FFF;
-
+    padding:1em;
+    padding-top:0;
+    margin:0;
+    background-color:#EDF1F3;
+    font-family: Arial, Helvetica, sans-serif;
 }
-#results {
-			border: solid black 1px;
+
+a {
+    color: #0A5096;
+    text-decoration: none;
+}
+a:hover {
+    color: #0A5096;
+    text-decoration: underline;
+}
+
+#wrapper {
+    padding:0;
+    background-color:#FFF;
+    width:960px;
+    margin:auto; 
+    border: 1px solid #B2B2B2;
+    margin: 0 auto;    
+}
+
+#header {
+    margin:0;
+    padding:1em;
+    background-color:#004682;
+    background-image: linear-gradient(to top, #0072BD 0%, #004682 100%);
+    color:#FFF;
+}
+
+#body {
+    padding:1em;
+}
+
+#languages {
+    padding:0.5em;
+    margin:0;
+    background-color:#dbdede;
+    text-align: right;
+}
+
+#languages li {
+    padding:0.5em;
+    display: inline;
+}
+
+#app {
+    display:table;
+    width:100%;
+    border-spacing:1em;
+}
+
+#app div {
+   padding:0.5em;
+   /*border: solid black 1px;*/
+   background-color:#dbdede;
+   display:table-cell;
+   width:99%;
+}
+
+#app #examples {
+   padding:0.5em;
+   /*border: solid black 1px;*/
+   background-color:#dbdede;
+   display:table-cell;
+   white-space: nowrap;
+}
+
+#app #examples ul {
+    list-style-type: none;
+    padding-left: 1em;
+}
+
+#app #examples .pending {
+    color: orange;
+}
+
+#app #examples .failed {
+    color: red;
+}
+
+#app #examples .started {
+    color: green;
+}
+[ng-cloak] {
+  display: none !important;
 }
