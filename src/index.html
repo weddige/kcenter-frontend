@@ -14,31 +14,32 @@
         <ul id="languages"><li><a href="../en/">en</a></li><li><a href="../de/">de</a></li></ul>
         <div id="body">
             <p>
-                k-center bla bla bla.<br />
-                Geometric, on graphs, etc...
+                k-center is often described by the problem to place k fire stations such that the maximal operational distance is minimized. This almost archetypal instance invites to a deeper look at k-center in urban areas.
             </p>
+			<p>
+		        This applications shows two approaches to solve the problem: Street networks as metric graphs and point clouds on an euclidian plane. The latter is based on the asumption, that the ratio between the distance on the street network and the beeline does not depend to much on the route. 
+			</p>
             <noscript>
                 This app depends heavily on JavaScript. Please activate JavaScript!
             </noscript>
             <div ng-app="kcenter" ng-controller="KCenterController as controller" ng-cloak id="app">
-                <div ng-if="controller.state == 'select'">
-                    <span ng-repeat="param in controller.params track by $index">{{ param }}/</span>
+                <div ng-if="controller.state == 'select'" style="text-align:center; vertical-align:middle;">
+                    <span ng-repeat="param in controller.params track by $index" style="padding:0.25em; margin-right:1em; background-color:#EDF1F3;">{{ param }}</span><br />
+                    Chose {{ controller.title }}:
                     <select ng-model="controller.param">
                         <option ng-repeat="option in controller.options">{{ option }}</option>
                     </select> <button ng-click="controller.next()">Next</button>
                 </div>
-                <div ng-if="controller.state == 'waiting'">
+                <div ng-if="controller.state == 'waiting'" style="text-align:center; vertical-align:middle;">
                     <img src="img/balls64.gif" alt="Please wait" />
                 </div>
-                <div ng-if="controller.state == 'view'">
-                    <table>
-                        <tr><th>Description</th><td>{{ controller.data.description }}</td></tr>
+                <div ng-if="controller.state == 'view'" style="vertical-align:top;">
+                    <table style="width:100%;">
+                        <tr><td colspan="2" style="text-align:center;"><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td></tr>
+						<tr><th>Description</th><td>{{ controller.data.description }}</td></tr>
                         <tr><th>Result</th><td><span ng-repeat="p in controller.data.result ">({{ p }}), </span></td></tr>
                         <tr><th>Objective</th><td>{{ controller.data.objective }}</td></tr>
-                        <tr>
-                            <th>Visualisation</th>
-                            <td><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td>
-                        </tr>
+
                     </table>
                     <button ng-click="controller.restart()">Go back</button>
                 </div>
@@ -46,7 +47,7 @@
                     Sorry, but the computation failed. Presumably it timed out.<br />
                     <button ng-click="controller.restart()">Go back</button>
                 </div>
-                <div id="examples">
+                <div id="examples" style="vertical-align:top;">
                     <ul ng-repeat="task in controller.tasks">
                         <li>
                             <a href="#" ng-click="controller.data = task; controller.state = 'view';" ng-if="task['state'] == 'finished'">{{ task['description'] }}</a>
@@ -60,13 +61,32 @@
                 Give short introduction, maybe some notation.
             </p>
             <h3>Gonzalez</h3>
-            <p>Fast and simple</p>
-            <h3>Brandenberg and Roth</h3>
-            <p>More powerfull, etc.</p>
-            <h3>Shape</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Graph or set of points</span>
             <p>
-                Explain the idea!
+				Gonzalez algorithm is applicable to both metric and euclidean k-center. It starts with one arbitrary centre and chooses allways the node furthest from the already chosen nodes as new center. It's depends on fast distance calculations and is therefore much faster for euclidean k-center.
+			</p>
+			<p>The result of this algorithm is guaranteed within two times of the optimal solution.</p>
+            <h3>Brandenberg and Roth</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>			
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Set of points</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+            <p>Brandenberg and Roths algorithm is a branch and bound algorithm on coresets.</p>
+			<p>The result of this algorithm is guaranteed within (1+&epsilon;)-times of the optimal solution.</p>
+            <h3>Grid approximation</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Shape</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&delta;</span>
+            <p>
+                This algorithm tries to use, that on many occasions the input of euclidean k-center consists of a dense cloud of points. Especially if the number of points is much larger than k, most of them have little influence of the result.
             </p>
+			<p>
+				Therefore the problem size can be reduced, if the outline of the cloud of points is computed and filled with suffciently many new points.
+			</p>
+			<p>
+				For the computations on the newly generated instance this algorithm uses Brandenberg and Roths algorithm.
+			</p>
         </div>
     </div>
 </body>
