@@ -17,6 +17,7 @@ angular.module('kcenter', ['kcenter.config'])
         $http.get(url).success(function(data, status, headers) {
             if (data['suggestions']) {
                 self.options = data['suggestions'];
+                self.param = self.options[0];
 				self.title = data['title'];
             } else {
                 self.params = [];
@@ -61,6 +62,7 @@ angular.module('kcenter', ['kcenter.config'])
         var url = this.computation_server + '/algorithms';
         $http.get(url).success(function(data) {
             self.options = data['suggestions'];
+            self.param = self.options[0];
 			self.title = data['title'];
         });
         this.examples();
