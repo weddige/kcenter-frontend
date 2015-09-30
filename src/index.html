@@ -36,8 +36,9 @@
                     <table style="width:100%;">
                         <tr><td colspan="2" style="text-align:center;"><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td></tr>
 						<tr><th>Description</th><td>{{ controller.data.description }}</td></tr>
-                        <tr><th>Result</th><td><span ng-repeat="p in controller.data.result ">({{ p }}), </span></td></tr>
-                        <tr><th>Objective</th><td>{{ controller.data.objective }}</td></tr>
+                        <!--<tr><th>Result</th><td><span ng-repeat="p in controller.data.result ">({{ p }}), </span></td></tr>-->
+                        <tr><th>Duration</th><td>{{ controller.data.duration }}</td></tr>
+			<tr><th>Objective</th><td>{{ controller.data.objective }}</td></tr>
 
                     </table>
                     <button ng-click="controller.restart()">Go back</button>
