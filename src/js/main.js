@@ -70,6 +70,8 @@ angular.module('kcenter', ['kcenter.config'])
 
     this.restart = function restart() {
         this.state = 'select';
+        this.params = [];
+        this.init();
     }
 
     this.init();

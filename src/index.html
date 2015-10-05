@@ -24,10 +24,10 @@
             </noscript>
             <div ng-app="kcenter" ng-controller="KCenterController as controller" ng-cloak id="app">
                 <div ng-if="controller.state == 'select'" style="text-align:center; vertical-align:middle;">
-                    <span ng-repeat="param in controller.params track by $index" style="padding:0.25em; margin-right:1em; background-color:#EDF1F3;">{{ param }}</span><br />
+                    <span ng-repeat="param in controller.params track by $index" style="padding:0.25em; margin-right:1em; line-height:2.5em; background-color:#EDF1F3;">{{ param }}</span><br />
                     Chose {{ controller.title }}:
                     <select ng-model="controller.param" ng-options="option for option in controller.options"></select>
-					<button ng-click="controller.next()">Next</button>
+					<button ng-click="controller.next()">Next</button><br><br><button ng-click="controller.restart()">Go back</button>
                 </div>
                 <div ng-if="controller.state == 'waiting'" style="text-align:center; vertical-align:middle;">
                     <img src="img/loader.gif" alt="Please wait" />
@@ -68,7 +68,7 @@
 			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>			
 			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Set of points</span>
 			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
-            <p>Brandenberg and Roths algorithm is a branch and bound algorithm on coresets.</p>
+            <p>Brandenberg and Roths algorithm is a branch and bound algorithm on coresets. It starts on k different empty sets and adds subsequently new points to them, until all remaining points are within (1+&epsilon;)-times the maximal radius of these sets of one of the centres of the sets.</p>
 			<p>The result of this algorithm is guaranteed within (1+&epsilon;)-times of the optimal solution.</p>
             <h3>Grid approximation</h3>
 			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	

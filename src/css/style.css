@@ -15,6 +15,10 @@ a:hover {
     text-decoration: underline;
 }
 
+th {
+	text-align: left;
+}
+
 #wrapper {
     padding:0;
     background-color:#FFF;
@@ -22,6 +26,13 @@ a:hover {
     margin:auto; 
     border: 1px solid #B2B2B2;
     margin: 0 auto;    
+}
+
+#footer {
+    padding:0;
+    width:960px;
+    margin:auto; 
+    margin: 0 auto;   
 }
 
 #header {
@@ -52,6 +63,7 @@ a:hover {
     display:table;
     width:100%;
     border-spacing:1em;
+    min-height:9em;
 }
 
 #app div {
@@ -68,6 +80,7 @@ a:hover {
    background-color:#dbdede;
    display:table-cell;
    white-space: nowrap;
+   min-width: 18em;
 }
 
 #app #examples ul {
