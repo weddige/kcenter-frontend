@@ -1,18 +1,222 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# German translations for PACKAGE package
+# German translation for PACKAGE.
+# Copyright (C) 2015 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Konstantin Weddige <konstantin@skathi.net>, 2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-29 20:21+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2015-11-01 22:09+0100\n"
+"PO-Revision-Date: 2015-11-01 22:42+0100\n"
+"Last-Translator: Konstantin Weddige <konstantin@skathi.net>\n"
+"Language-Team: German\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .translate~:1
+msgid "k-center"
+msgstr ""
+
+#: .translate~:2
+msgid "k-center problems on urban street networks"
+msgstr ""
+
+#: .translate~:3
+msgid "en"
+msgstr ""
+
+#: .translate~:4
+msgid "de"
+msgstr ""
+
+#: .translate~:5
+msgid ""
+"k-center is often described by the problem to place k fire stations such "
+"that the maximal operational distance is minimized. This almost archetypal "
+"instance invites to a deeper look at k-center in urban areas."
+msgstr ""
+
+#: .translate~:6
+msgid ""
+"This applications shows two approaches to solve the problem: Street networks "
+"as metric graphs and point clouds on an euclidean plane. The latter is based "
+"on the asumption, that the ratio between the distance on the street network "
+"and the beeline does not depend to much on the route."
+msgstr ""
+
+#: .translate~:7
+msgid "This app depends heavily on JavaScript. Please activate JavaScript!"
+msgstr ""
+
+#: .translate~:8
+msgid "Choose settings"
+msgstr ""
+
+#: .translate~:9
+msgid "{{ param }}"
+msgstr ""
+
+#: .translate~:10
+msgid "{{ controller.title }}"
+msgstr ""
+
+#: .translate~:11
+msgid "Next"
+msgstr ""
+
+#: .translate~:12 .translate~:19 .translate~:21
+msgid "Go back"
+msgstr ""
+
+#: .translate~:13
+msgid "Description"
+msgstr ""
+
+#: .translate~:14
+msgid "{{ controller.data.description }}"
+msgstr ""
+
+#: .translate~:15
+msgid "Duration"
+msgstr ""
+
+#: .translate~:16
+msgid "{{ controller.data.duration | number }}"
+msgstr ""
+
+#: .translate~:17
+msgid "Objective"
+msgstr ""
+
+#: .translate~:18
+msgid "{{ controller.data.objective | number }}"
+msgstr ""
+
+#: .translate~:20
+msgid "Sorry, but the computation failed. Presumably it timed out."
+msgstr ""
+
+#: .translate~:22 .translate~:23
+msgid "{{ task['description'] }}"
+msgstr ""
+
+#: .translate~:24
+msgid "The algorithms"
+msgstr ""
+
+#: .translate~:25
+msgid "Gonzalez"
+msgstr ""
+
+#: .translate~:26 .translate~:31 .translate~:38 .translate~:45
+msgid "k"
+msgstr ""
+
+#: .translate~:27
+msgid "Graph or set of points"
+msgstr ""
+
+#: .translate~:28
+msgid ""
+"Gonzalez algorithm is applicable to both metric and euclidean k-center. It "
+"starts with one arbitrary centre and chooses allways the node furthest from "
+"the already chosen nodes as new center. It's depends on fast distance "
+"calculations and is therefore much faster for euclidean k-center."
+msgstr ""
+
+#: .translate~:29
+msgid ""
+"The result of this algorithm is guaranteed within two times of the optimal "
+"solution."
+msgstr ""
+
+#: .translate~:30
+msgid "Brandenberg and Roth"
+msgstr ""
+
+#: .translate~:32
+msgid "Set of points"
+msgstr "Punktmenge"
+
+#: .translate~:33
+msgid ""
+"Brandenberg and Roths algorithm is a branch and bound algorithm on coresets. "
+"It starts on k different empty sets and adds subsequently new points to "
+"them, until all remaining points are within (1+"
+msgstr ""
+
+#: .translate~:34
+msgid ")-times the maximal radius of these sets."
+msgstr ""
+
+#: .translate~:35
+msgid "The result of this algorithm is guaranteed within (1+"
+msgstr ""
+
+#: .translate~:36
+msgid ")-times of the optimal solution."
+msgstr ""
+
+#: .translate~:37
+msgid "Grid approximation"
+msgstr ""
+
+#: .translate~:39
+msgid "Shape"
+msgstr ""
+
+#: .translate~:40
+msgid "or fraction"
+msgstr ""
+
+#: .translate~:41
+msgid ""
+"This algorithm tries to use, that on many occasions the input of euclidean k-"
+"center consists of a dense cloud of points. Especially if the number of "
+"points is much larger than k, most of them have little influence of the "
+"result."
+msgstr ""
+
+#: .translate~:42
+msgid ""
+"Therefore the problem size can be reduced, if the outline of the cloud of "
+"points is computed and filled with suffciently many new points."
+msgstr ""
+
+#: .translate~:43
+msgid ""
+"For the computations on the newly generated instance this algorithm uses "
+"Brandenberg and Roths algorithm."
+msgstr ""
+
+#: .translate~:44
+msgid "Ilhan/Pinar"
+msgstr "Ilhan and Pinar"
+
+#: .translate~:46
+msgid "Graph"
+msgstr ""
+
+#: .translate~:47
+msgid ""
+"This algorithm yields exact solutions for metric k-center by solving a "
+"series of LPs and IPs. The high running times restrict it to instances of "
+"less than a few hundred nodes."
+msgstr ""
+
+#: .translate~:48
+msgid "The source of this page can be found on"
+msgstr ""
+
+#: .translate~:49
+msgid "GitHub"
+msgstr ""
+
+#: .translate~:50
+msgid "."
+msgstr ""
