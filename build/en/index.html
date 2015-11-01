@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>k-center</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <h1 id="header">k-center problems on urban street networks</h1>
+        <ul id="languages"><li><a href="../en/">en</a></li><li><a href="../de/">de</a></li></ul>
+        <div id="body">
+            <p>
+                k-center is often described by the problem to place k fire stations such that the maximal operational distance is minimized. This almost archetypal instance invites to a deeper look at k-center in urban areas.
+            </p>
+			<p>
+		        This applications shows two approaches to solve the problem: Street networks as metric graphs and point clouds on an euclidean plane. The latter is based on the asumption, that the ratio between the distance on the street network and the beeline does not depend to much on the route. 
+			</p>
+            <noscript>
+                This app depends heavily on JavaScript. Please activate JavaScript!
+            </noscript>
+            <div ng-app="kcenter" ng-controller="KCenterController as controller" ng-cloak="None" id="app">
+                <div ng-if="controller.state == 'select'" style="text-align:center; vertical-align:middle;">
+					<h2>Choose settings</h2>
+					<table style="margin:auto; text-align:left;">		
+					<colgroup><col style="width:40%;" /><col /></colgroup>			
+					<tr ng-repeat="param in controller.params track by $index"><td></td><td style="padding: 0.5em 0;"><span style="padding:0.25em; background-color:#EDF1F3;">{{ param }}</span></td></tr>
+                    <tr><th>{{ controller.title }}</th><td><select ng-model="controller.param" ng-options="option for option in controller.options"></select> <button ng-click="controller.next()">Next</button></td></tr>
+					</table>
+					<br><br><button ng-click="controller.restart()">Go back</button>
+                </div>
+                <div ng-if="controller.state == 'waiting'" style="text-align:center; vertical-align:middle;">
+                    <img src="img/loader.gif" alt="Please wait" />
+                </div>
+                <div ng-if="controller.state == 'view'" style="vertical-align:top;">
+                    <table style="width:100%;">
+                        <tr><td colspan="2" style="text-align:center;"><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td></tr>
+						<tr><th>Description</th><td>{{ controller.data.description }}</td></tr>
+                        
+                        <tr><th>Duration</th><td>{{ controller.data.duration | number }}</td></tr>
+			<tr><th>Objective</th><td>{{ controller.data.objective | number }}</td></tr>
+
+                    </table>
+                    <button ng-click="controller.restart()">Go back</button>
+                </div>
+                <div ng-if="controller.state == 'error'">
+                    Sorry, but the computation failed. Presumably it timed out.<br />
+                    <button ng-click="controller.restart()">Go back</button>
+                </div>
+                <div id="examples" style="vertical-align:top;">
+                    <ul ng-repeat="task in controller.tasks">
+                        <li>
+                            <a href="#" ng-click="controller.data = task; controller.state = 'view';" ng-if="task['state'] == 'finished'">{{ task['description'] }}</a>
+                            <span ng-if="task['state'] != 'finished'" class="{{ task['state'] }}" title="{{ task['state'] }}">{{ task['description'] }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h2>The algorithms</h2>
+            <h3>Gonzalez</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Graph or set of points</span>
+            <p>
+				Gonzalez algorithm is applicable to both metric and euclidean k-center. It starts with one arbitrary centre and chooses allways the node furthest from the already chosen nodes as new center. It's depends on fast distance calculations and is therefore much faster for euclidean k-center.
+			</p>
+			<p>The result of this algorithm is guaranteed within two times of the optimal solution.</p>
+            <h3>Brandenberg and Roth</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>			
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Punktmenge</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+            <p>Brandenberg and Roths algorithm is a branch and bound algorithm on coresets. It starts on k different empty sets and adds subsequently new points to them, until all remaining points are within (1+&epsilon;)-times the maximal radius of these sets.</p>
+			<p>The result of this algorithm is guaranteed within (1+&epsilon;)-times of the optimal solution.</p>
+            <h3>Grid approximation</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Shape</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&delta; or fraction</span>
+            <p>
+                This algorithm tries to use, that on many occasions the input of euclidean k-center consists of a dense cloud of points. Especially if the number of points is much larger than k, most of them have little influence of the result.
+            </p>
+			<p>
+				Therefore the problem size can be reduced, if the outline of the cloud of points is computed and filled with suffciently many new points.
+			</p>
+			<p>
+				For the computations on the newly generated instance this algorithm uses Brandenberg and Roths algorithm.
+			</p>
+			<h3>Ilhan and Pinar</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Graph</span>
+            <p>
+                This algorithm yields exact solutions for metric k-center by solving a series of LPs and IPs. The high running times restrict it to instances of less than a few hundred nodes.
+            </p>
+        </div>
+    </div>
+	<div id="footer">The source of this page can be found on <a href="https://github.com/weddige/kcenter-frontend">GitHub</a>.</div>
+</body>
+</html>

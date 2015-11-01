@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>k-center</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <h1 id="header">k-center Probleme in städtischen Straßennetzen</h1>
+        <ul id="languages"><li><a href="../en/">en</a></li><li><a href="../de/">de</a></li></ul>
+        <div id="body">
+            <p>
+                k-center wird oft damit erklärt, dass k Feuerwachen so plaziert werden sollen, dass die maximale Einsatzdistanz minimiert wird. Diese beinahe archetypische Probleminstanzmotiviert dazu, k-center in städtischen Gebieten genauer zu betrachten.
+            </p>
+			<p>
+		        Diese Anwendung zeigt zwei Herangehensweisen an das Problem: Straßennetze als metrische Graphen und als Punktwolken in einer euklidischen Ebene. Letzteres baut auf der Annahme auf, dass das Verhältniss der Entfernung auf dem Straßennetz und der Luftlinie in einem Gebiet weitgehend universell ist. 
+			</p>
+            <noscript>
+                Diese Anwendung benötigt JavaScript. Bitte aktivieren Sie JavaScript!
+            </noscript>
+            <div ng-app="kcenter" ng-controller="KCenterController as controller" ng-cloak="None" id="app">
+                <div ng-if="controller.state == 'select'" style="text-align:center; vertical-align:middle;">
+					<h2>Wähle die Parameter</h2>
+					<table style="margin:auto; text-align:left;">		
+					<colgroup><col style="width:40%;" /><col /></colgroup>			
+					<tr ng-repeat="param in controller.params track by $index"><td></td><td style="padding: 0.5em 0;"><span style="padding:0.25em; background-color:#EDF1F3;">{{ param }}</span></td></tr>
+                    <tr><th>{{ controller.title }}</th><td><select ng-model="controller.param" ng-options="option for option in controller.options"></select> <button ng-click="controller.next()">Weiter</button></td></tr>
+					</table>
+					<br><br><button ng-click="controller.restart()">Zurück</button>
+                </div>
+                <div ng-if="controller.state == 'waiting'" style="text-align:center; vertical-align:middle;">
+                    <img src="img/loader.gif" alt="Please wait" />
+                </div>
+                <div ng-if="controller.state == 'view'" style="vertical-align:top;">
+                    <table style="width:100%;">
+                        <tr><td colspan="2" style="text-align:center;"><img src="{{ controller.computation_server }}{{ controller.data.img }}" /></td></tr>
+						<tr><th>Beschreibung</th><td>{{ controller.data.description }}</td></tr>
+                        
+                        <tr><th>Dauer</th><td>{{ controller.data.duration | number }}</td></tr>
+			<tr><th>Zielfunktionswert</th><td>{{ controller.data.objective | number }}</td></tr>
+
+                    </table>
+                    <button ng-click="controller.restart()">Zurück</button>
+                </div>
+                <div ng-if="controller.state == 'error'">
+                    Entschuldigung, aber die Berechnung ist fehlgeschlagen. Vermutlich wurde die Zeitbeschränkung überschritten.<br />
+                    <button ng-click="controller.restart()">Zurück</button>
+                </div>
+                <div id="examples" style="vertical-align:top;">
+                    <ul ng-repeat="task in controller.tasks">
+                        <li>
+                            <a href="#" ng-click="controller.data = task; controller.state = 'view';" ng-if="task['state'] == 'finished'">{{ task['description'] }}</a>
+                            <span ng-if="task['state'] != 'finished'" class="{{ task['state'] }}" title="{{ task['state'] }}">{{ task['description'] }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h2>Die Algorithmen</h2>
+            <h3>Gonzalez</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Graph oder Punktmenge</span>
+            <p>
+				Der Algorithmus von Gonzalez is sowohl auf metrische, als auch das euklidische k-center anwendbar. Er beginnt mit einem beliebigen Zentrum und wählt dann immer den Knoten, der am weitesten von den bereits gewählten Zentren entfert ist. Er ist dabei von der schnellen Berechnung von Distanzen abhängig und daher für euklidische k-center deutlich schneller.
+			</p>
+			<p>Das Ergebniss dieses Algorithmus ist garantiert maximal doppelt so groß, wie das Optimum.</p>
+            <h3>Brandenberg and Roth</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>			
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Punktmenge</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+            <p>Der Algorithmus von Brandenberg und Roth betrachtete ist ein Branch-and-Bound algorithmus auf Coresets. Er beginnt mit k verschiedenen leeren Mengen und fügt nacheinander neue Punkte zu ihnen hinzu, bis alle verbleibenden Punkte innerhalb des (1+&epsilon;)-fachen des maximalen Radius dieser Mengen</p>
+			<p>Der Algorithmus garantiert, dass das Ergebniss innerhalb das (1+&epsilon;)-fachen der Optimallösung ist.</p>
+            <h3>Apporiximierung über Gitter</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Umgriss</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&epsilon;</span>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">&delta; oder Bruchteil</span>
+            <p>
+                Dieser Algorithmus nutzt aus, dass in vielen Fällen die Eingabe für euklidische k-center eine dichte Punktwolke ist. Insbesonders, wenn die Anzahl der Punkte deutlich größer als k ist, haben die einzelnen Punkt oft kaum Einfluss auf das Ergebniss.
+            </p>
+			<p>
+				Daher kann die Problemgröße reduziert werden, indem der Umriss der Punktwolke berechnet wird und anschließend mit neuen Punkten befüllt wird.
+			</p>
+			<p>
+				Für die Lösung der so generierten Instanz wird der Algorithmus von Brandenberg und Roth verwendet.
+			</p>
+			<h3>Ilhan und Pinar</h3>
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">k</span>	
+			<span style="padding:0.25em; margin-right:1em; background-color:#dbdede;">Graph</span>
+            <p>
+                Dieser Algorithmus berechnet die exakte Lösung für metrische k-center über eine Reihe von LPs und IPs. Die hohe Laufzeit schränkt seine Anwendung allerdings auf Instanzen mit weniger als ein paar hundert Knoten ein.
+            </p>
+        </div>
+    </div>
+	<div id="footer">Der Quellcode dieser Webseite befindet sich auf <a href="https://github.com/weddige/kcenter-frontend">GitHub</a>.</div>
+</body>
+</html>
